@@ -11,14 +11,14 @@ Because the memory is your repository, it stays with you when you change model, 
 
 ```
 memory/
-  MEMORY.md          the index, loaded every session: who you are, standing rules, one line per area
+  MEMORY.md          the index, loaded every session: who you are, rules, areas
   SETUP.md           the rules the agent follows when it saves something
   example/
     README.md        one line per note, with "Open if:" triggers
     commits.md       current state, rewritten when it changes
     commits-log.md   history, appended to, searched rather than read
 check.py             pre-commit check
-drift.py             lists notes that point at paths or URLs that no longer exist
+drift.py             lists notes pointing at paths or URLs that are gone
 link.sh              links MEMORY.md into your agent and installs the hook
 ```
 
