@@ -2,10 +2,11 @@
 <h1 align="center">agent-vault</h1>
 <p align="center">Memory for coding agents, kept as plain markdown in a git repository you own.</p>
 
-Agents that load an instructions file at startup (Claude Code reads `CLAUDE.md`, Codex reads `AGENTS.md`) get a
-short index. The index names a folder for the task, the folder's `README.md` names a note, and the agent opens
-that note. There is no database, server or embedding step: agents read files with the tools they already have.
-Because the memory is your repository, it stays with you when you change model, harness or provider.
+Coding agents read an instructions file at the start of every session: Claude Code reads `CLAUDE.md`, Codex reads
+`AGENTS.md`. agent-vault puts a short index there, so it is always in context. The index names a folder for the
+task, the folder's `README.md` names a note, and the agent opens that note. There is no database, server or
+embedding step: agents read files with the tools they already have. Because the memory is your repository, it
+stays with you when you change model, harness or provider.
 
 ## How it works
 
@@ -26,13 +27,22 @@ To find something, an agent reads the index (already in context), one area READM
 
 ## Quick start
 
-1. Clone this repository to a path you will keep, such as `~/agent-vault`, and point `origin` at a new private
-   repository of your own: it will hold personal notes.
+Tell your agent:
+
+> Make a private copy of https://github.com/DKeAlvaro/agent-vault and set it up for me.
+
+It follows these steps, which you can also run yourself:
+
+1. Create a private repository from this one, cloned to a path you will keep, such as `~/agent-vault`:
+   `gh repo create agent-vault --private --template DKeAlvaro/agent-vault --clone`. Without the GitHub CLI, clone
+   this repository and point `origin` at a new private one. It must be private, because it will hold personal
+   notes; a GitHub fork of a public repository is public.
 2. Run `sh link.sh`. It links `memory/MEMORY.md` to `~/.claude/CLAUDE.md` (a symlink on Linux and macOS, a
    one-line `@` import on Windows under Git Bash) and installs `check.py` as the repository's pre-commit hook.
    An existing `CLAUDE.md` is moved to `CLAUDE.md.bak-<time>`; copy what you need from it into `MEMORY.md`.
-3. Fill in the placeholders in `memory/MEMORY.md` and replace `memory/example/` with your own areas.
-4. Start a session and ask the agent to remember something. It should update or add a note, list it in the
+3. Fill in the placeholders in `memory/MEMORY.md` and replace `memory/example/` with your own areas. An agent
+   doing the setup asks you for these instead of inventing them.
+4. Commit and push. Then start a session and ask the agent to remember something. It should update or add a note, list it in the
    area's README and commit. If the check fails, its output says what to fix.
 
 Requires git and Python 3.7 or newer. Neither script needs to be executable.
