@@ -6,8 +6,13 @@ set -e
 cd "$(dirname "$0")"
 SRC="$(pwd)/memory/MEMORY.md"
 TARGET="${1:-$HOME/.claude/CLAUDE.md}"
-case "$(uname -s)" in # Windows: symlinks need admin rights, so write a one-line @import instead
-	MINGW* | MSYS* | CYGWIN*) IMPORT="@$(cygpath -m "$SRC")" NOW=$(cat "$TARGET" 2>/dev/null || true) ;;
+case "$(uname -s)" in # Windows: symlinks need admin rights, so write one line that leads to the index instead
+	MINGW* | MSYS* | CYGWIN*)
+		W="$(cygpath -m "$SRC")" NOW=$(cat "$TARGET" 2>/dev/null || true)
+		case "$TARGET" in # Claude Code resolves an @import; any other agent gets a plain instruction
+			*CLAUDE.md) IMPORT="@$W" ;;
+			*) IMPORT="Read $W before anything else and follow it." ;;
+		esac ;;
 	*) IMPORT='' NOW=$(readlink "$TARGET" 2>/dev/null || true) ;;
 esac
 if [ "$NOW" != "${IMPORT:-$SRC}" ]; then
